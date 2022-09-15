@@ -1,0 +1,11 @@
+Model Information:
+* title:	Blastoise
+* source:	https://sketchfab.com/3d-models/blastoise-417667e24bf14139b4de351c9b79b789
+* author:	nguyenlouis32 (https://sketchfab.com/nguyenlouis32)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Blastoise" (https://sketchfab.com/3d-models/blastoise-417667e24bf14139b4de351c9b79b789) by nguyenlouis32 (https://sketchfab.com/nguyenlouis32) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
