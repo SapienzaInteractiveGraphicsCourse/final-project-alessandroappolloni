@@ -43,18 +43,27 @@ let treesR4 = [];
 let treesR5 = [];
 
 const modelLoader = new GLTFLoader();
-let modelsArticuno = []
-let modelsBlastoise = []
+
+let models2 = [] 	//obstacle 
+let models3 = []	//obstacle
 
 let model1;
+let spine;
+let hip;
+let tail;
 let leftUpperArm;
 let rightUpperArm;
+let leftLowerArm;
+let rightLowerArm;
 let leftUpperLeg;
+let leftLowerLeg;
 let rightUpperLeg;
+let rightLowerLeg;
 
 let points = 0;
 let health = 0;
 
+let running = true;
 
 
 class Ground {
@@ -84,7 +93,7 @@ class Ground {
 	const height = 2;  
 	const geometry = new THREE.PlaneGeometry(width, height);
 	const material = new THREE.MeshPhongMaterial({
-		//color: 'green',
+		
 		map: textureLoader.load('textures/grass_1.jpg')
 	});
 	material.map.wrapS = THREE.RepeatWrapping;
@@ -198,7 +207,111 @@ class Tree{
 	}
 }
 
+function blaziken(){
+	modelLoader.load( '/models/blaziken/scene.gltf', function ( gltf ) {
+		model1 = gltf.scene
+		model1.scale.set(0.03,0.03,0.03);
+		model1.position.x = 0;
+		model1.position.y = -0.005;
+		model1.position.z = 0.90;
+		model1.rotation.x = -0.3;
+		model1.rotation.y = 3.1;
+		scene.add(model1);
+		leftUpperArm = model1.getObjectByName("LArm_035");
+		leftUpperArm.rotation.z = 5.7;
+		
+		rightUpperArm = model1.getObjectByName("RArm_066");
+		rightUpperArm.rotation.z = -5.7;
+		
+		leftLowerArm = model1.getObjectByName("LForeArm_036");
+		leftLowerArm.rotation.y = 0;
+		
+		rightLowerArm = model1.getObjectByName("RForeArm_067");
+		rightLowerArm.rotation.y = -1.2; 
+		
+		leftUpperLeg = model1.getObjectByName("LThigh_05");
+		leftLowerLeg = model1.getObjectByName("LLeg_06")
+		
+		rightUpperLeg = model1.getObjectByName("RThigh_018");
+		rightLowerLeg = model1.getObjectByName("RLeg_019")
+		
+		spine = model1.getObjectByName("Spine1_015");
+		hip = model1.getObjectByName("Hips_04");
+		tail = model1.getObjectByName("Tail_030"); 
+		
+		animationBlaziken();
 
+	}, undefined, function ( error ) {
+		console.error( error );
+	} );
+}
+
+function blastoise(){
+	for(let i=0; i<1; i++){
+		modelLoader.load( '/models/blastoise/scene.gltf', function ( gltf ) {
+			models2[i] = gltf.scene
+			models2[i].scale.set(0.04,0.04,0.04);
+			models2[i].position.x = 0//groundPathXBlastoise[Math.floor(Math.random() * groundPath.length)];
+			models2[i].position.y = 0.0;
+			models2[i].position.z = 0.4//groundPathZBlastoise[Math.floor(Math.random() * groundPath.length)];
+			scene.add(models2[i]);
+			//console.log(dumpObject(models2[i]).join('\n'));
+			animationBlastoise(models2[i]);
+	
+		}, undefined, function ( error ) {
+			console.error( error );
+		} );
+	}
+}
+
+function animationBlastoise(model){
+	if(model){
+
+		//LeftCannon
+		let leftCannon = model.getObjectByName("LFeelerB_016");
+		const tweenLC1 = new TWEEN.Tween(leftCannon.rotation)
+			.to({ x: 0, y: '+0', z: '+0' }, 500)
+
+
+		const tweenLC2 = new TWEEN.Tween(leftCannon.rotation)
+			.to({ x: -0.3, y: '+0', z: '+0' }, 500)
+
+		tweenLC1.chain(tweenLC2);
+		tweenLC2.chain(tweenLC1);
+		tweenLC1.start();
+		
+		
+		//RightCannon
+		let rightCannon = model.getObjectByName("RFeelerB_054");
+		const tweenRC1 = new TWEEN.Tween(rightCannon.rotation)
+			.to({ x: 0, y: '+0', z: '+0' }, 500)
+
+
+		const tweenRC2 = new TWEEN.Tween(rightCannon.rotation)
+			.to({ x: -0.3, y: '+0', z: '+0' }, 500)
+
+		tweenRC1.chain(tweenRC2);
+		tweenRC2.chain(tweenRC1);
+		tweenRC1.start();
+
+
+		//LeftLeg
+		let leftLeg = model.getObjectByName("LThigh_021")
+		
+		
+		/*const tweenLL1 = new TWEEN.Tween(leftLeg.rotation)
+			.to({ x: '+0', y: '+0', z: 0.1 }, 500)
+
+
+		const tweenLL2 = new TWEEN.Tween(leftLeg.rotation)
+			.to({ x: '+0', y: '+0', z: -0.1 }, 500)
+
+		tweenLL1.chain(tweenLL2);
+		tweenLL2.chain(tweenLL1);
+		tweenLL1.start();*/
+
+	}
+}
 
 
 
@@ -335,44 +448,11 @@ function main(){
 		} );
 	}*/
 	
-	/*//Blastoise
-	for(let i=0; i<2; i++){
-		modelLoader.load( '/models/blastoise/scene.gltf', function ( gltf ) {
-			modelsBlastoise[i] = gltf.scene
-			modelsBlastoise[i].scale.set(0.04,0.04,0.04);
-			modelsBlastoise[i].position.x = groundPathXBlastoise[Math.floor(Math.random() * groundPath.length)];
-			modelsBlastoise[i].position.y = 0.03;
-			modelsBlastoise[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPath.length)];
-			scene.add(modelsBlastoise[i]);
-			//console.log(dumpObject(blastoise).join('\n'));
+	blastoise();
+	//blaziken();
 	
-		}, undefined, function ( error ) {
-			console.error( error );
-		} );
-	}*/
-
-	//Blaziken
-	modelLoader.load( '/models/blaziken/scene.gltf', function ( gltf ) {
-		model1 = gltf.scene
-		model1.scale.set(0.03,0.03,0.03);
-		model1.position.x = 0;
-		model1.position.y = 0;
-		model1.position.z = 0.90;
-		model1.rotation.y = 3.1;
-		scene.add(model1);
-		leftUpperArm = model1.getObjectByName("LArm_035");
-		leftUpperArm.rotation.z = 5.7;
-		rightUpperArm = model1.getObjectByName("RArm_066");
-		rightUpperArm.rotation.z = -5.7;
-		leftUpperLeg = model1.getObjectByName("LThigh_05");
-		rightUpperLeg = model1.getObjectByName("RThigh_018");
-		animationBlaziken();
-
-	}, undefined, function ( error ) {
-		console.error( error );
-	} );
 	
-	//Blaziken movement
+	//user movement
 	document.addEventListener("keydown", onKeyDown, false);
 
 	
@@ -468,6 +548,12 @@ function render() {
 	
 	collisionSystem();
 	
+	for(let i=0; i<1; i++){
+		if(models2[i]){
+			let leftLeg = models2[i].getObjectByName("LThigh_021")
+			leftLeg.position.z -= 0.1
+		}
+	}
 
 	//GAME LOGIC
 	//console.log(points);
@@ -494,7 +580,7 @@ function animationPokeball(time) {
 		pokeballs[i].rotation.y = (time * 6)
 		pokeballs[i].position.z += 0.01;
 		
-		if (pokeballs[i].position.z > 2) {
+		if (pokeballs[i].position.z > 1.2) {
 			//pokeballs[i].position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
 			pokeballs[i].position.z = -1.3;
 			pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
@@ -503,37 +589,147 @@ function animationPokeball(time) {
 }
 
 function animationBlaziken(){
-	//Basic idle running animation for Blaziken
+	//Basic idle running animation for model1
+	
 	if(model1){
 		
-		
-		const tweenA = new TWEEN.Tween(leftUpperLeg.rotation) 
-			.to({ x: '+0', y: 0.8,  z:'+0' }, 1000)
-			.start() 
+
+		//LeftUpperLeg
+		const tweenLUL1 = new TWEEN.Tween(leftUpperLeg.rotation) 
+			.to({ x: '+0', y: 0.5,  z:'+0' }, 500)
+			 
 			
-		const tweenB = new TWEEN.Tween(leftUpperLeg.rotation) 
-			.to({ x: '+0', y: -0.8,  z: '+0' }, 1000) 
+		const tweenLUL2 = new TWEEN.Tween(leftUpperLeg.rotation) 
+			.to({ x: '+0', y: -1.2,  z: '+0' }, 500) 
 			
-		tweenA.chain(tweenB);
-		tweenB.chain(tweenA);
-		tweenA.start();	
+		tweenLUL1.chain(tweenLUL2);
+		tweenLUL2.chain(tweenLUL1);
+		tweenLUL1.start();	
+
+		//LeftLowerLeg
+		const tweenLLL1 = new TWEEN.Tween(leftLowerLeg.rotation) 
+			.to({ x: '+0', y: 0.9,  z:'+0' }, 500)
+	
+	
+		const tweenLLL2 = new TWEEN.Tween(leftLowerLeg.rotation) 
+			.to({ x: '+0', y: 0.5,  z: '+0' }, 500) 
+	
+	
+		tweenLLL1.chain(tweenLLL2);
+		tweenLLL2.chain(tweenLLL1);
+		tweenLLL1.start();
 
 		
-		
-		const tweenC = new TWEEN.Tween(rightUpperLeg.rotation) 
-			.to({ x: '+0', y: -0.8,  z:'+0' }, 1000)
-		
-		
-		const tweenD = new TWEEN.Tween(rightUpperLeg.rotation) 
-			.to({ x: '+0', y: 0.8,  z: '+0' }, 1000) 
+		//RightUpperLeg
+		const tweenRUL1 = new TWEEN.Tween(rightUpperLeg.rotation) 
+			.to({ x: '+0', y: -1.2,  z:'+0' }, 500)
 		
 		
-		tweenC.chain(tweenD);
-		tweenD.chain(tweenC);
-		tweenC.start();
+		const tweenRUL2 = new TWEEN.Tween(rightUpperLeg.rotation) 
+			.to({ x: '+0', y: 0.5,  z: '+0' }, 500) 
+		
+		
+		tweenRUL1.chain(tweenRUL2);
+		tweenRUL2.chain(tweenRUL1);
+		tweenRUL1.start();
 
+		//RightLowerLeg
+		const tweenRLL1 = new TWEEN.Tween(rightLowerLeg.rotation) 
+			.to({ x: '+0', y: 0.4,  z:'+0' }, 500)
+	
+	
+		const tweenRLL2 = new TWEEN.Tween(rightLowerLeg.rotation) 
+			.to({ x: '+0', y: 0.9,  z: '+0' }, 500) 
+	
+	
+		tweenRLL1.chain(tweenRLL2);
+		tweenRLL2.chain(tweenRLL1);
+		tweenRLL1.start();
 		
+		//RightArm
+		const tweenRUA1 = new TWEEN.Tween(rightUpperArm.rotation) 
+			.to({ x: '+0', y: 0.2,  z:'+0' }, 500)
+			 
 		
+		const tweenRUA2 = new TWEEN.Tween(rightUpperArm.rotation) 
+			.to({ x: '+0', y: -0.8,  z: '+0' }, 500) 
+		
+		tweenRUA1.chain(tweenRUA2);
+		tweenRUA2.chain(tweenRUA1);
+		tweenRUA1.start();
+		
+		//RightLowerArm
+		const tweenRLE1 = new TWEEN.Tween(rightLowerArm.rotation) 
+			.to({ x: '+0', y: 0,  z:'+0' }, 500)
+			 
+		
+		const tweenRLE2 = new TWEEN.Tween(rightLowerArm.rotation) 
+			.to({ x: '+0', y: -1.2,  z: '+0' }, 500) 
+		
+		tweenRLE1.chain(tweenRLE2);
+		tweenRLE2.chain(tweenRLE1);
+		tweenRLE1.start();
+
+
+		//LeftArm
+		const tweenLUA1 = new TWEEN.Tween(leftUpperArm.rotation) 
+			.to({ x: '+0', y: -0.8,  z:'+0' }, 500)
+			 
+		
+		const tweenLUA2 = new TWEEN.Tween(leftUpperArm.rotation) 
+			.to({ x: '+0', y: 0.2,  z: '+0' }, 500) 
+		
+		tweenLUA1.chain(tweenLUA2);
+		tweenLUA2.chain(tweenLUA1);
+		tweenLUA1.start();
+		
+		//LeftLowerArm
+		const tweenLLA1 = new TWEEN.Tween(leftLowerArm.rotation) 
+		.to({ x: '+0', y: -1.2,  z:'+0' }, 500)
+		 
+	
+		const tweenLLA2 = new TWEEN.Tween(leftLowerArm.rotation) 
+		.to({ x: '+0', y: 0,  z: '+0' }, 500) 
+	
+		tweenLLA1.chain(tweenLLA2);
+		tweenLLA2.chain(tweenLLA1);
+		tweenLLA1.start();
+
+		//Spine
+		const tweenSP1 = new TWEEN.Tween(spine.rotation) 
+			.to({ x: -0.2, y: '+0',  z:'+0' }, 500)
+			
+		
+		const tweenSP2 = new TWEEN.Tween(spine.rotation) 
+			.to({ x: 0.2, y: '+0',  z: '+0' }, 500) 
+		
+		tweenSP1.chain(tweenSP2);
+		tweenSP2.chain(tweenSP1);
+		tweenSP1.start();
+
+		//Hip
+		const tweenHIP1 = new TWEEN.Tween(hip.rotation) 
+			.to({ x: -0.05, y: '+0',  z:'+0' }, 500)
+			
+		
+		const tweenHIP2 = new TWEEN.Tween(hip.rotation) 
+			.to({ x: 0.05, y: '+0',  z: '+0' }, 500) 
+		
+		tweenHIP1.chain(tweenHIP2);
+		tweenHIP2.chain(tweenHIP1);
+		tweenHIP1.start();
+
+		//Tail
+		const tweenTL1 = new TWEEN.Tween(tail.rotation) 
+			.to({ x: 0.4, y: '+0',  z:'+0' }, 500)
+			
+		
+		const tweenTL2 = new TWEEN.Tween(tail.rotation) 
+			.to({ x: -0.4, y: '+0',  z: '+0' }, 500) 
+		
+		tweenTL1.chain(tweenTL2);
+		tweenTL2.chain(tweenTL1);
+		tweenTL1.start();
 		
 		
 	}
@@ -707,7 +903,7 @@ function onKeyDown(e){
 				//model1.position.y = 0.1;
 				const coords = model1.position
 				const tween = new TWEEN.Tween(coords) 
-					.to({ x: '+0', y: [0.15, 0], z: '+0' }, 800) 
+					.to({ x: '+0', y: [0.15, 0], z: '+0' }, 2000) 
 					.easing(TWEEN.Easing.Quadratic.Out) 
 					.start()
 
@@ -724,11 +920,11 @@ function onKeyDown(e){
 			}
 		break;
 		//Down
-		case 40:
+		/*case 40:
 			if(model1){
 				model1.position.y = 0;
 			}
-		break;
+		break;*/
 	}
 }
 
