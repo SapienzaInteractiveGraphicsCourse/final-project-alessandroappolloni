@@ -1,14 +1,15 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.134.0/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.134.0/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from 'https://cdn.skypack.dev/three@0.134.0/examples/jsm/controls/OrbitControls.js';
-import { TWEEN } from 'https://cdn.skypack.dev/three@0.134.0/examples/jsm/libs/tween.module.min';
-//import { TWEEN } from 'https://unpkg.com/three@0.139.0/examples/jsm/libs/tween.module.min.js';
+import { TWEEN } from 'https://unpkg.com/three@0.139.0/examples/jsm/libs/tween.module.min.js';
 
 
 const textureLoader = new THREE.TextureLoader();
 const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({canvas});
+//const renderer = new THREE.WebGLRenderer();
 const camera = new THREE.PerspectiveCamera( 60, 2, 0.1, 1000 );
+//const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
 
@@ -63,7 +64,7 @@ let rightLowerLeg;
 let points = 0;
 let health = 0;
 
-let running = true;
+let running;
 
 
 class Ground {
@@ -303,12 +304,16 @@ window.onload = main();
 function main(){
 	
 	camera.position.set(0, 0.2, 1.2)
+	running = false;
+	//renderer.setSize( window.innerWidth, window.innerHeight );
+	//document.body.appendChild( renderer.domElement );
 	
 	scene.background = new THREE.Color('skyblue');
 	scene.fog = new THREE.Fog('skyblue', 1, 2.5);
 	
 	//For moving the camera. For testing
 	const controls = new OrbitControls(camera, canvas);
+	//const controls = new OrbitControls(camera, renderer.domElement )
     controls.target.set(0, 0, 0);
     controls.update();
 
@@ -404,14 +409,16 @@ function main(){
 	//user movement
 	document.addEventListener("keydown", onKeyDown, false);
 
-	
-
 	render()
+	
 }
 
 
 function render() {
-		
+	/*document.getElementById("start").onclick = () =>{
+		running = true;
+	};
+	if(!running){return;}*/
 	
 	if (resizeRendererToDisplaySize(renderer)) {
 	  const canvas = renderer.domElement;
@@ -496,15 +503,17 @@ function render() {
 	}
 	
 	
+	userInterface();
 	collisionSystem();
 
 	//GAME LOGIC
-	//console.log(points);
+	console.log(points);
 	//console.log(health);
 	
 	renderer.render(scene, camera);
 	requestAnimationFrame(render);
 	TWEEN.update()
+
 
 }
 
@@ -1006,10 +1015,6 @@ function collisionSystem(){
 
 		}*/
 	}
-
-	
-	
-	
 }
 
 function onKeyDown(e){
@@ -1056,6 +1061,10 @@ function onKeyDown(e){
 			}
 		break;*/
 	}
+}
+
+function userInterface(){
+	document.getElementById("points").innerText = 'Points: ' + points;
 }
 
 function resizeRendererToDisplaySize(renderer) {
