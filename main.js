@@ -24,12 +24,12 @@ let cloud3;
 let cloud4;
 let cloud5;
 let cloud6;
+
 let groundPath = [-0.2, 0, 0.2];
 let groundPathZ = [-1.3, -1.9, -2.6]
 let groundPathZArticuno = [-1.7, -2.3];
-let groundPathXArticuno = [-0.2, 0, 0.2]
 let groundPathZBlastoise = [-1.5, -2.4];
-let groundPathXBlastoise = [-0.2, 0, 0.2]
+
 let pokeballs = [];
 let treesL1 = [];
 let treesL2 = [];
@@ -247,15 +247,14 @@ function blaziken(){
 }
 
 function blastoise(){
-	for(let i=0; i<1; i++){
+	for(let i=0; i<2; i++){
 		modelLoader.load( '/models/blastoise/scene.gltf', function ( gltf ) {
 			models2[i] = gltf.scene
 			models2[i].scale.set(0.04,0.04,0.04);
-			models2[i].position.x = 0//groundPathXBlastoise[Math.floor(Math.random() * groundPath.length)];
+			models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			models2[i].position.y = 0.0;
-			models2[i].position.z = 0.4//groundPathZBlastoise[Math.floor(Math.random() * groundPath.length)];
+			models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPath.length)];
 			scene.add(models2[i]);
-			//console.log(dumpObject(models2[i]).join('\n'));
 			animationBlastoise(models2[i]);
 	
 		}, undefined, function ( error ) {
@@ -264,52 +263,103 @@ function blastoise(){
 	}
 }
 
-function animationBlastoise(model){
+function articuno(){
+	for(let i=0; i<1; i++){
+		modelLoader.load( '/models/articuno/scene.gltf', function ( gltf ) {
+			models3[i] = gltf.scene
+			models3[i].scale.set(0.02,0.02,0.02);
+			models3[i].position.x = 0//groundPath[Math.floor(Math.random() * groundPath.length)];
+			models3[i].position.y = 0.03;
+			models3[i].position.z = 0.4//groundPathZArticuno[Math.floor(Math.random() * groundPath.length)];
+			models3[i].rotation.x = 1.0;
+			scene.add(models3[i]);
+			
+			let tail1 = models3[i].getObjectByName("Tail1_044");
+			tail1.scale.set(0.3,0.5,1)
+			//tail1.rotation.x = 0.5
+
+			animationArticuno(models3[i]);
+	
+		}, undefined, function ( error ) {
+			console.error( error );
+		} );
+	}
+}
+
+function animationArticuno(model){
 	if(model){
 
-		//LeftCannon
-		let leftCannon = model.getObjectByName("LFeelerB_016");
-		const tweenLC1 = new TWEEN.Tween(leftCannon.rotation)
-			.to({ x: 0, y: '+0', z: '+0' }, 500)
+		//Idle up and down
+		const tweenM1 = new TWEEN.Tween(model.position) 
+			.to({ x: '+0', y: 0.05,  z: '+0' }, 500)
+			 
+			
+		const tweenM2 = new TWEEN.Tween(model.position) 
+			.to({ x: '+0', y: 0.03,  z: '+0' }, 500) 
+			
+		tweenM1.chain(tweenM2);
+		tweenM2.chain(tweenM1);
+		tweenM1.start();
 
-
-		const tweenLC2 = new TWEEN.Tween(leftCannon.rotation)
-			.to({ x: -0.3, y: '+0', z: '+0' }, 500)
-
-		tweenLC1.chain(tweenLC2);
-		tweenLC2.chain(tweenLC1);
-		tweenLC1.start();
+		//LeftFoot
+		let leftFoot = model.getObjectByName("LFoot_07");
+		const tweenLF1 = new TWEEN.Tween(leftFoot.rotation) 
+			.to({ x: '+0', y: -0.8,  z: '+0' }, 500)
+			 
+			
+		const tweenLF2 = new TWEEN.Tween(leftFoot.rotation) 
+			.to({ x: '+0', y: -1.2,  z: '+0' }, 500) 
+			
+		tweenLF1.chain(tweenLF2);
+		tweenLF2.chain(tweenLF1);
+		tweenLF1.start();
 		
 		
-		//RightCannon
-		let rightCannon = model.getObjectByName("RFeelerB_054");
-		const tweenRC1 = new TWEEN.Tween(rightCannon.rotation)
-			.to({ x: 0, y: '+0', z: '+0' }, 500)
 
-
-		const tweenRC2 = new TWEEN.Tween(rightCannon.rotation)
-			.to({ x: -0.3, y: '+0', z: '+0' }, 500)
-
-		tweenRC1.chain(tweenRC2);
-		tweenRC2.chain(tweenRC1);
-		tweenRC1.start();
-
-
-		//LeftLeg
-		let leftLeg = model.getObjectByName("LThigh_021")
+		//RightFoot
+		let rightFoot = model.getObjectByName("RFoot_026");
+		const tweenRF1 = new TWEEN.Tween(rightFoot.rotation) 
+			.to({ x: '+0', y: -0.8,  z: '+0' }, 500)
+			 
+			
+		const tweenRF2 = new TWEEN.Tween(rightFoot.rotation) 
+			.to({ x: '+0', y: -1.2,  z: '+0' }, 500) 
+			
+		tweenRF1.chain(tweenRF2);
+		tweenRF2.chain(tweenRF1);
+		tweenRF1.start();
 		
-		
-		/*const tweenLL1 = new TWEEN.Tween(leftLeg.rotation)
-			.to({ x: '+0', y: '+0', z: 0.1 }, 500)
+		//Leftside
+		let leftUpArm = model.getObjectByName("LArm_066")
+		const tweenLUA1 = new TWEEN.Tween(leftUpArm.rotation) 
+			.to({ x: '+0', y: '+0',  z: -0.5 }, 500)
+			 
+			
+		const tweenLUA2 = new TWEEN.Tween(leftUpArm.rotation) 
+			.to({ x: '+0', y: '+0',  z: 0.5 }, 500) 
+			
+		tweenLUA1.chain(tweenLUA2);
+		tweenLUA2.chain(tweenLUA1);
+		tweenLUA1.start();
 
 
-		const tweenLL2 = new TWEEN.Tween(leftLeg.rotation)
-			.to({ x: '+0', y: '+0', z: -0.1 }, 500)
+		let leftLowHand = model.getObjectByName("LHand2_070")
+		console.log(leftLowHand.rotation.z)
 
-		tweenLL1.chain(tweenLL2);
-		tweenLL2.chain(tweenLL1);
-		tweenLL1.start();*/
+		//--------------------------------------------------
 
+		//RightSide
+		let rightUpArm = model.getObjectByName("RArm_082")
+		const tweenRUA1 = new TWEEN.Tween(rightUpArm.rotation) 
+			.to({ x: '+0', y: '+0',  z: 0.5 }, 500)
+			 
+			
+		const tweenRUA2 = new TWEEN.Tween(rightUpArm.rotation) 
+			.to({ x: '+0', y: '+0',  z: -0.5 }, 500) 
+			
+		tweenRUA1.chain(tweenRUA2);
+		tweenRUA2.chain(tweenRUA1);
+		tweenRUA1.start();
 	}
 }
 
@@ -404,7 +454,7 @@ function main(){
 	cloud6.position.z = -0.6;
 	scene.add(cloud6);
 
-	addTree();
+	tree();
 
 
 	//Pokeballs
@@ -413,20 +463,6 @@ function main(){
 		pokeball.position.y = 0.05;
 		pokeball.position.x = groundPath[Math.floor(Math.random() * groundPath.length)]
 		pokeball.position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
-		/*switch(i){
-			case 0:
-				pokeball.position.z = -1.3
-			break;
-			case 1:
-				pokeball.position.z = -1.9
-			break;
-			case 2:
-				pokeball.position.z = -2.6
-			break;
-			case 3:
-				pokeball.position.z = -3.2
-			break;
-		}*/
 		pokeballs.push(pokeball);
 		scene.add(pokeball);
 	}
@@ -448,9 +484,9 @@ function main(){
 		} );
 	}*/
 	
-	blastoise();
+	//blastoise();
 	//blaziken();
-	
+	articuno();
 	
 	//user movement
 	document.addEventListener("keydown", onKeyDown, false);
@@ -529,31 +565,24 @@ function render() {
 			modelsArticuno[i].position.z += 0.01;
 			if (modelsArticuno[i].position.z > 2) {
 				modelsArticuno[i].position.z = -1.3;
-				modelsArticuno[i].position.x = groundPathXArticuno[Math.floor(Math.random() * groundPath.length)];
+				modelsArticuno[i].position.x = groundPathX[Math.floor(Math.random() * groundPath.length)];
 			}
 		}
-	}
+	}*/
 
 	//Blastoise movement
-	for (let i = 0; i < 2; i++) {
-		if (modelsBlastoise[i]) {
-			modelsBlastoise[i].position.z += 0.01;
-			if (modelsBlastoise[i].position.z > 2) {
-				modelsBlastoise[i].position.z = -1.3;
-				modelsBlastoise[i].position.x = groundPathXArticuno[Math.floor(Math.random() * groundPath.length)];
+	/*for (let i = 0; i < 2; i++) {
+		if (models2[i]) {
+			models2[i].position.z += 0.01;
+			if (models2[i].position.z > 1) {
+				models2[i].position.z = -1.3;
+				models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			}
 		}
 	}*/
 	
 	
 	collisionSystem();
-	
-	for(let i=0; i<1; i++){
-		if(models2[i]){
-			let leftLeg = models2[i].getObjectByName("LThigh_021")
-			leftLeg.position.z -= 0.1
-		}
-	}
 
 	//GAME LOGIC
 	//console.log(points);
@@ -735,7 +764,82 @@ function animationBlaziken(){
 	}
 }
 
-function addTree(){
+function animationBlastoise(model){
+	if(model){
+
+		//LeftCannon
+		let leftCannon = model.getObjectByName("LFeelerB_016");
+		const tweenLC1 = new TWEEN.Tween(leftCannon.rotation)
+			.to({ x: -0.3, y: '+0', z: '+0' }, 500)
+
+
+		const tweenLC2 = new TWEEN.Tween(leftCannon.rotation)
+			.to({ x: -0, y: '+0', z: '+0' }, 500)
+
+		tweenLC1.chain(tweenLC2);
+		tweenLC2.chain(tweenLC1);
+		tweenLC1.start();
+		
+		
+		//RightCannon
+		let rightCannon = model.getObjectByName("RFeelerB_054");
+		const tweenRC1 = new TWEEN.Tween(rightCannon.rotation)
+			.to({ x: 0.3, y: '+0', z: '+0' }, 500)
+
+
+		const tweenRC2 = new TWEEN.Tween(rightCannon.rotation)
+			.to({ x: 0, y: '+0', z: '+0' }, 500)
+
+		tweenRC1.chain(tweenRC2);
+		tweenRC2.chain(tweenRC1);
+		tweenRC1.start();
+
+
+		//Jaw
+		let jaw = model.getObjectByName("Jaw_036")
+		const tweenJ1 = new TWEEN.Tween(jaw.rotation)
+			.to({ x: '0', y: -2, z: '+0' }, 500)
+
+
+		const tweenJ2 = new TWEEN.Tween(jaw.rotation)
+			.to({ x: '+0', y: -1.1, z: '+0' }, 500)
+
+		tweenJ1.chain(tweenJ2);
+		tweenJ2.chain(tweenJ1);
+		tweenJ1.start();
+
+		//LeftArm
+		let leftArm = model.getObjectByName("LArm_01");
+		const tweenLA1 = new TWEEN.Tween(leftArm.rotation)
+		.to({ x: 0.3, y: '+0', z: '+0' }, 500)
+
+
+		const tweenLA2 = new TWEEN.Tween(leftArm.rotation)
+		.to({ x: -0.3, y: '+0', z: '+0' }, 500)
+
+		tweenLA1.chain(tweenLA2);
+		tweenLA2.chain(tweenLA1);
+		tweenLA1.start();
+
+		//RightArm
+		let rightArm = model.getObjectByName("RArm_042");
+		const tweenRA1 = new TWEEN.Tween(rightArm.rotation)
+		.to({ x: -0.3, y: '+0', z: '+0' }, 500)
+
+
+		const tweenRA2 = new TWEEN.Tween(rightArm.rotation)
+		.to({ x: 0.3, y: '+0', z: '+0' }, 500)
+
+		tweenRA1.chain(tweenRA2);
+		tweenRA2.chain(tweenRA1);
+		tweenRA1.start();
+	}
+}
+
+
+
+function tree(){
+	
 	//Trees on the left
 	let treeL1PositionZ = 0.9;
 	for (let i = 0; i < numTree; i++) {
@@ -792,6 +896,7 @@ function addTree(){
 		treeL5PositionZ -= 0.3;
 	}
 
+	//Trees on the right
 	let treeR1PositionZ = 0.9;
 	for (let i = 0; i < numTree; i++) {
 		let tree = new Tree();
