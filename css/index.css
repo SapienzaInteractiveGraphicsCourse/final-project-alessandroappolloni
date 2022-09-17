@@ -25,4 +25,17 @@ html, body{
     bottom: 0;
     left: 0;
     right: 0;
+    background-color: skyblue;
 }
+
+#game-over-menu{
+    display: none;
+    position: absolute;
+    place-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: skyblue;
+}
+

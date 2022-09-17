@@ -7,11 +7,13 @@ import { TWEEN } from 'https://unpkg.com/three@0.139.0/examples/jsm/libs/tween.m
 const textureLoader = new THREE.TextureLoader();
 const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({canvas});
-//const renderer = new THREE.WebGLRenderer();
 const camera = new THREE.PerspectiveCamera( 60, 2, 0.1, 1000 );
-//const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
+
+const startMenu = document.getElementById("intro");
+const gameOverMenu = document.getElementById("game-over-menu");
+const gameOverScore = document.getElementById("game-over-score");
 
 const numPokeball = 4;
 const numTree = 8;
@@ -64,7 +66,7 @@ let rightLowerLeg;
 let points = 0;
 let health = 0;
 
-let running;
+let GAME_RUNNING = false;
 
 
 class Ground {
@@ -201,7 +203,8 @@ class Tree{
 		meshTopCone.scale.set(0.06,0.1,0.06);
 		meshTopCone.position.y = 0.064;
 
-		group.scale.set(1.2,3,1.2)
+		//group.scale.set(1.2,3,1.2)
+		group.scale.set(3,6,3)
 
 		return group;
 
@@ -304,16 +307,13 @@ window.onload = main();
 function main(){
 	
 	camera.position.set(0, 0.2, 1.2)
-	running = false;
-	//renderer.setSize( window.innerWidth, window.innerHeight );
-	//document.body.appendChild( renderer.domElement );
+	
 	
 	scene.background = new THREE.Color('skyblue');
 	scene.fog = new THREE.Fog('skyblue', 1, 2.5);
 	
 	//For moving the camera. For testing
 	const controls = new OrbitControls(camera, canvas);
-	//const controls = new OrbitControls(camera, renderer.domElement )
     controls.target.set(0, 0, 0);
     controls.update();
 
@@ -408,17 +408,18 @@ function main(){
 	
 	//user movement
 	document.addEventListener("keydown", onKeyDown, false);
+	
 
+	
 	render()
+	
+	
 	
 }
 
 
 function render() {
-	/*document.getElementById("start").onclick = () =>{
-		running = true;
-	};
-	if(!running){return;}*/
+	
 	
 	if (resizeRendererToDisplaySize(renderer)) {
 	  const canvas = renderer.domElement;
@@ -428,14 +429,55 @@ function render() {
 
 	const elapsedTime = clock.getElapsedTime();
 	
+	userInterface();
+	collisionSystem();
+	
+	renderer.render(scene, camera);
+	requestAnimationFrame(render);
+	
+	
+	if(GAME_RUNNING){
+		movementGround(elapsedTime);
+		movementPokeball(elapsedTime);
+		movementTree()
+		movementBlastoise();
+		movementArticuno();
+		TWEEN.update()
+	}
 
-	animationPokeball(elapsedTime);
 
-	//Ground movement
-	ground1.position.z = (elapsedTime * 0.5) % 2;
-	ground2.position.z = ((elapsedTime * 0.5) % 2) - 2;
+}
 
-	//Tree movement
+
+
+
+
+/**
+ * ********************************************************************************************************
+ * ********************************************************************************************************
+ * ********************************************************************************************************
+ */
+
+function movementPokeball(time) {
+	for (let i = 0; i < numPokeball; i++) {
+		pokeballs[i].rotation.y = (time * 6)
+		pokeballs[i].position.z += 0.01;
+		
+		if (pokeballs[i].position.z > 1.2) {
+			//pokeballs[i].position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
+			pokeballs[i].position.z = -1.3;
+			pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
+		}
+	}
+}
+
+function movementGround(time){
+	ground1.position.z = (time * 0.5) % 2;
+	ground2.position.z = ((time * 0.5) % 2) - 2;
+
+}
+
+function movementTree(){
 	for(let i=0; i<numTree; i++){
 		treesL1[i].position.z += 0.01;
 		if(treesL1[i].position.z > 1){
@@ -478,20 +520,9 @@ function render() {
 			treesR5[i].position.z = -1.3;
 		}
 	}
-	
-	//Articuno Movement
-	for (let i = 0; i < 2; i++) {
-		if (models3[i]) {
-			console.log(models3[i].position);
-			models3[i].position.z += 0.01;
-			if (models3[i].position.z > 1.5) {
-				models3[i].position.z = -1.3;
-				models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
-			}
-		}
-	}
+}
 
-	//Blastoise movement
+function movementBlastoise(){
 	for (let i = 0; i < 2; i++) {
 		if (models2[i]) {
 			models2[i].position.z += 0.01;
@@ -501,41 +532,16 @@ function render() {
 			}
 		}
 	}
-	
-	
-	userInterface();
-	collisionSystem();
-
-	//GAME LOGIC
-	console.log(points);
-	//console.log(health);
-	
-	renderer.render(scene, camera);
-	requestAnimationFrame(render);
-	TWEEN.update()
-
-
 }
 
-
-
-
-
-/**
- * ********************************************************************************************************
- * ********************************************************************************************************
- * ********************************************************************************************************
- */
-
-function animationPokeball(time) {
-	for (let i = 0; i < numPokeball; i++) {
-		pokeballs[i].rotation.y = (time * 6)
-		pokeballs[i].position.z += 0.01;
-		
-		if (pokeballs[i].position.z > 1.2) {
-			//pokeballs[i].position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
-			pokeballs[i].position.z = -1.3;
-			pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
+function movementArticuno(){
+	for (let i = 0; i < 2; i++) {
+		if (models3[i]) {
+			models3[i].position.z += 0.01;
+			if (models3[i].position.z > 1.5) {
+				models3[i].position.z = -1.3;
+				models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
+			}
 		}
 	}
 }
@@ -1002,6 +1008,12 @@ function collisionSystem(){
 				points++;
 			}	
 		}
+		if(points > 2){
+			GAME_RUNNING = false;
+			gameOverMenu.style.display = 'grid'
+			gameOverScore.innerText = "Score: " + points
+			points = 0;
+		}
 		/*for(let i=0; i<modelsBlastoise.length; i++){
 			let blastoise = modelsBlastoise[i];
 			
@@ -1016,6 +1028,8 @@ function collisionSystem(){
 		}*/
 	}
 }
+
+
 
 function onKeyDown(e){
 	switch(e.keyCode){
@@ -1054,17 +1068,24 @@ function onKeyDown(e){
 					.start()
 			}
 		break;
-		//Down
-		/*case 40:
-			if(model1){
-				model1.position.y = 0;
-			}
-		break;*/
+
 	}
 }
 
 function userInterface(){
 	document.getElementById("points").innerText = 'Points: ' + points;
+	
+	document.getElementById("start").onclick = () =>{
+		GAME_RUNNING = true;
+		
+		startMenu.style.display = 'none';
+	};
+	
+	document.getElementById("try-again-button").onclick = () =>{
+		GAME_RUNNING = true;
+		
+		gameOverMenu.style.display = 'none';
+	};
 }
 
 function resizeRendererToDisplaySize(renderer) {
