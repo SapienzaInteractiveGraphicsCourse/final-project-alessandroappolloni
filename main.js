@@ -3,7 +3,7 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.134.0/examples/jsm/l
 import {OrbitControls} from 'https://cdn.skypack.dev/three@0.134.0/examples/jsm/controls/OrbitControls.js';
 import { TWEEN } from 'https://unpkg.com/three@0.139.0/examples/jsm/libs/tween.module.min.js';
 
-
+const modelLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({canvas});
@@ -16,7 +16,7 @@ const gameOverMenu = document.getElementById("game-over-menu");
 const gameOverScore = document.getElementById("game-over-score");
 
 const numPokeball = 4;
-const numTree = 8;
+const numTree = 4;
 
 let ground1;
 let ground2;
@@ -35,17 +35,12 @@ let groundPathZBlastoise = [-1.5, -2.4];
 
 let pokeballs = [];
 let treesL1 = [];
-let treesL2 = [];
 let treesL3 = [];
-let treesL4 = [];
-let treesL5 = [];
 let treesR1 = [];
-let treesR2 = [];
 let treesR3 = [];
-let treesR4 = [];
-let treesR5 = [];
 
-const modelLoader = new GLTFLoader();
+
+
 
 let models2 = [] 	//obstacle 
 let models3 = []	//obstacle
@@ -63,8 +58,7 @@ let leftLowerLeg;
 let rightUpperLeg;
 let rightLowerLeg;
 
-let points = 0;
-let health = 0;
+let score = 0;
 
 let GAME_RUNNING = false;
 
@@ -204,7 +198,7 @@ class Tree{
 		meshTopCone.position.y = 0.064;
 
 		//group.scale.set(1.2,3,1.2)
-		group.scale.set(3,6,3)
+		group.scale.set(5,8,5)
 
 		return group;
 
@@ -296,6 +290,62 @@ function articuno(){
 	}
 }
 
+function tree(){
+	
+	//Trees on the left
+	let treeL1PositionZ = 0.9;
+	for (let i = 0; i < numTree; i++) {
+		let tree = new Tree();
+		tree.position.x = -0.65;
+		tree.position.y = 0.05;
+		tree.position.z = treeL1PositionZ;
+		scene.add(tree);
+		treesL1.push(tree);
+		treeL1PositionZ -= 0.6;
+	}
+
+	
+
+	let treeL3PositionZ = 0.9;
+	for (let i = 0; i < numTree; i++) {
+		let tree = new Tree();
+		tree.position.x = -1.4;
+		tree.position.y = 0.05;
+		tree.position.z = treeL3PositionZ;
+		scene.add(tree);
+		treesL3.push(tree);
+		treeL3PositionZ -= 0.6;
+	}
+
+	
+
+	//Trees on the right
+	let treeR1PositionZ = 0.9;
+	for (let i = 0; i < numTree; i++) {
+		let tree = new Tree();
+		tree.position.x = 0.65;
+		tree.position.y = 0.05;
+		tree.position.z = treeR1PositionZ;
+		scene.add(tree);
+		treesR1.push(tree);
+		treeR1PositionZ -= 0.6;
+	}
+	
+
+	let treeR3PositionZ = 0.9;
+	for (let i = 0; i < numTree; i++) {
+		let tree = new Tree();
+		tree.position.x = 1.4;
+		tree.position.y = 0.05;
+		tree.position.z = treeR3PositionZ;
+		scene.add(tree);
+		treesR3.push(tree);
+		treeR3PositionZ -= 0.6;
+	}
+
+	
+}
+
 
 
 //----------------------------------------------------------------------------------------------------
@@ -352,7 +402,7 @@ function main(){
 	scene.add(groundGrass);*/
 
 	//Clouds
-	cloud1 = new Cloud();
+	/*cloud1 = new Cloud();
 	cloud1.position.x = -1.4
 	cloud1.position.y = 0.6;
 	cloud1.position.z = -0.6;
@@ -362,12 +412,12 @@ function main(){
 	cloud2.position.x = -0.9;
 	cloud2.position.y = 0.4;
 	cloud2.position.z = -0.6;
-	scene.add(cloud2);
+	scene.add(cloud2);*/
 
 	cloud3 = new Cloud();
 	cloud3.position.x = -0.3;
 	cloud3.position.y = 0.5;
-	cloud3.position.z = -0.6;
+	cloud3.position.z = -0.8;
 	scene.add(cloud3);
 
 	cloud4 = new Cloud();
@@ -376,11 +426,11 @@ function main(){
 	cloud4.position.z = -0.6;
 	scene.add(cloud4);
 
-	cloud5 = new Cloud();
+	/*cloud5 = new Cloud();
 	cloud5.position.x = 0.7;
 	cloud5.position.y = 0.5;
 	cloud5.position.z = -0.6;
-	scene.add(cloud5);
+	scene.add(cloud5);*/
 
 	cloud6 = new Cloud();
 	cloud6.position.x = 1.4;
@@ -483,42 +533,22 @@ function movementTree(){
 		if(treesL1[i].position.z > 1){
 			treesL1[i].position.z = -1.3;
 		}
-		/*treesL2[i].position.z += 0.01;
-		if(treesL2[i].position.z > 1){
-			treesL2[i].position.z = -1.3;
-		}*/
+	
 		treesL3[i].position.z += 0.01;
 		if(treesL3[i].position.z > 1){
 			treesL3[i].position.z = -1.3;
 		}
-		/*treesL4[i].position.z += 0.01;
-		if(treesL4[i].position.z > 1){
-			treesL4[i].position.z = -1.3;
-		}*/
-		treesL5[i].position.z += 0.01;
-		if(treesL5[i].position.z > 1){
-			treesL5[i].position.z = -1.3;
-		}
+		
 		treesR1[i].position.z += 0.01;
 		if(treesR1[i].position.z > 1){
 			treesR1[i].position.z = -1.3;
 		}
-		/*treesR2[i].position.z += 0.01;
-		if(treesR2[i].position.z > 1){
-			treesR2[i].position.z = -1.3;
-		}*/
+		
 		treesR3[i].position.z += 0.01;
 		if(treesR3[i].position.z > 1){
 			treesR3[i].position.z = -1.3;
 		}
-		/*treesR4[i].position.z += 0.01;
-		if(treesR4[i].position.z > 1){
-			treesR4[i].position.z = -1.3;
-		}*/
-		treesR5[i].position.z += 0.01;
-		if(treesR5[i].position.z > 1){
-			treesR5[i].position.z = -1.3;
-		}
+		
 	}
 }
 
@@ -876,121 +906,6 @@ function animationArticuno(model){
 }
 
 
-
-function tree(){
-	
-	//Trees on the left
-	let treeL1PositionZ = 0.9;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = -0.5;
-		tree.position.y = 0.05;
-		tree.position.z = treeL1PositionZ;
-		scene.add(tree);
-		treesL1.push(tree);
-		treeL1PositionZ -= 0.3;
-	}
-
-	/*let treeL2PositionZ = 0.7;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = -0.7;
-		tree.position.y = 0.05;
-		tree.position.z = treeL2PositionZ;
-		scene.add(tree);
-		treesL2.push(tree);
-		treeL2PositionZ -= 0.3;
-	}*/
-
-	let treeL3PositionZ = 0.9;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = -0.9;
-		tree.position.y = 0.05;
-		tree.position.z = treeL3PositionZ;
-		scene.add(tree);
-		treesL3.push(tree);
-		treeL3PositionZ -= 0.3;
-	}
-
-	/*let treeL4PositionZ = 0.7;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = -1.1;
-		tree.position.y = 0.05;
-		tree.position.z = treeL4PositionZ;
-		scene.add(tree);
-		treesL4.push(tree);
-		treeL4PositionZ -= 0.3;
-	}*/
-
-	let treeL5PositionZ = 0.9;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = -1.3;
-		tree.position.y = 0.05;
-		tree.position.z = treeL5PositionZ;
-		scene.add(tree);
-		treesL5.push(tree);
-		treeL5PositionZ -= 0.3;
-	}
-
-	//Trees on the right
-	let treeR1PositionZ = 0.9;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = 0.5;
-		tree.position.y = 0.05;
-		tree.position.z = treeR1PositionZ;
-		scene.add(tree);
-		treesR1.push(tree);
-		treeR1PositionZ -= 0.3;
-	}
-	/*let treeR2PositionZ = 0.7;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = 0.7;
-		tree.position.y = 0.05;
-		tree.position.z = treeR2PositionZ;
-		scene.add(tree);
-		treesR2.push(tree);
-		treeR2PositionZ -= 0.3;
-	}*/
-
-	let treeR3PositionZ = 0.9;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = 0.9;
-		tree.position.y = 0.05;
-		tree.position.z = treeR3PositionZ;
-		scene.add(tree);
-		treesR3.push(tree);
-		treeR3PositionZ -= 0.3;
-	}
-
-	/*let treeR4PositionZ = 0.7;
-	for (let i = 0; i < 8; i++) {
-		let tree = new Tree();
-		tree.position.x = 1.1;
-		tree.position.y = 0.05;
-		tree.position.z = treeR4PositionZ;
-		scene.add(tree);
-		treesR4.push(tree);
-		treeR4PositionZ -= 0.3;
-	}*/
-
-	let treeR5PositionZ = 0.9;
-	for (let i = 0; i < numTree; i++) {
-		let tree = new Tree();
-		tree.position.x = 1.3;
-		tree.position.y = 0.05;
-		tree.position.z = treeR5PositionZ;
-		scene.add(tree);
-		treesR5.push(tree);
-		treeR5PositionZ -= 0.3;
-	}
-}
-
 function collisionSystem(){
 	
 	if(model1){
@@ -1005,14 +920,16 @@ function collisionSystem(){
 			if(diffPos.length() < 0.1){
 				pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 				pokeballs[i].position.z = -1.3;
-				points++;
+				score++;
 			}	
 		}
-		if(points > 2){
+		if(score > 2){
 			GAME_RUNNING = false;
-			gameOverMenu.style.display = 'grid'
-			gameOverScore.innerText = "Score: " + points
-			points = 0;
+			setTimeout(() => {
+				gameOverMenu.style.display = 'grid'
+			}, 1000)
+			gameOverScore.innerText = "Score: " + score
+			score = 0;
 		}
 		/*for(let i=0; i<modelsBlastoise.length; i++){
 			let blastoise = modelsBlastoise[i];
@@ -1073,9 +990,9 @@ function onKeyDown(e){
 }
 
 function userInterface(){
-	document.getElementById("points").innerText = 'Points: ' + points;
+	document.getElementById("score").innerText = 'Score: ' + score;
 	
-	document.getElementById("start").onclick = () =>{
+	document.getElementById("start-button").onclick = () =>{
 		GAME_RUNNING = true;
 		
 		startMenu.style.display = 'none';
