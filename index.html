@@ -18,7 +18,7 @@
 			<button id="start">Start</button>
 		</div>--> 
 
-		<div id="intro" class="row">
+		<div id="main-menu" class="row">
 			<div class="column"><p></p></div>
 			<div class="column">
 				<div class="row">
@@ -31,6 +31,22 @@
 				<div class="row">
 					<button id="start-button">Start</button>
 				</div>
+				
+				<div class="row">
+					<input type="checkbox" id="sounds" name="sounds" checked>
+      				<label for="sounds">Sounds</label>
+				</div>
+				<div class="row">
+					Difficulty:
+					<form>
+						<input type="radio" id="easy" name="difficulty" value="0.01" >
+						<label for="easy">Easy</label><br>
+						<input type="radio" id="normal" name="difficulty" value="0.015" checked>
+						<label for="normal">Normal</label><br>
+						<input type="radio" id="hard" name="difficulty" value="0.025">
+						<label for="hard">Hard</label>
+					  </form>
+				</div>
 			</div>
 			<div class="column"><p></p></div>
 		</div>
@@ -41,6 +57,7 @@
 				<div id="game-over-title">Game Over!</div>
 				<div id="game-over-score">Score: </div>
 				<div id="game-over-button"><button id="try-again-button">Try Again</button></div>
+				<div id="game-over-button2"><button id="main-menu-button">Main Menu</button></div>
 			</div>
 		</div>
 

@@ -11,12 +11,21 @@ const camera = new THREE.PerspectiveCamera( 60, 2, 0.1, 1000 );
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
 
-const startMenu = document.getElementById("intro");
+//Sounds
+let audio = document.getElementById("sounds").checked;
+const audioLoader = new THREE.AudioLoader();
+const listener = new THREE.AudioListener();
+const soundMainTheme = new THREE.Audio( listener );
+const soundPokeball = new THREE.Audio( listener ); 
+
+const mainMenu = document.getElementById("main-menu");
 const gameOverMenu = document.getElementById("game-over-menu");
 const gameOverScore = document.getElementById("game-over-score");
 
+
 const numPokeball = 4;
 const numTree = 4;
+let SPEED_DIFFICULTY;
 
 let ground1;
 let ground2;
@@ -39,11 +48,8 @@ let treesL3 = [];
 let treesR1 = [];
 let treesR3 = [];
 
-
-
-
-let models2 = [] 	//obstacle 
-let models3 = []	//obstacle
+let models2 = [] 	//obstacles
+let models3 = []	//obstacles
 
 let model1;
 let spine;
@@ -83,25 +89,6 @@ class Ground {
 
 	}
 }
-
-/*class GroundGrass {
-	constructor(){
-	const width = 10;  
-	const height = 2;  
-	const geometry = new THREE.PlaneGeometry(width, height);
-	const material = new THREE.MeshPhongMaterial({
-		
-		map: textureLoader.load('textures/grass_1.jpg')
-	});
-	material.map.wrapS = THREE.RepeatWrapping;
-	material.map.wrapT = THREE.RepeatWrapping;
-	material.map.repeat.set(15, 5);
-	material.flatShading = true;
-	const planeMesh = new THREE.Mesh(geometry, material);
-	planeMesh.scale.set(1.0,1.0,1.0)
-	return planeMesh;
-	}
-}*/
 
 class Pokeball {
 	constructor(){
@@ -162,7 +149,6 @@ class Tree{
 		const geometry = new THREE.CylinderGeometry(
     		radiusTop, radiusBottom, height, radialSegments);
 		const material = new THREE.MeshPhongMaterial({
-				//color: '#9a4a1c',
 				flatShading: true,
 				map: textureLoader.load('textures/trunk1.jpg')
 		});
@@ -171,12 +157,11 @@ class Tree{
 		group.add(trunkMesh);
 
 		//Bottom cone
-		const radius1 = 0.6;  // ui: radius
-		const height1 = 0.3;  // ui: height
-		const radialSegments1 = 8;  // ui: radialSegments
+		const radius1 = 0.6;  
+		const height1 = 0.3;  
+		const radialSegments1 = 8;  
 		const geometryCone = new THREE.ConeGeometry(radius1, height1, radialSegments1);
 		const materialCone = new THREE.MeshPhongMaterial({
-			//color: '#286c0d',
 			flatShading: true,
 			map: textureLoader.load('textures/green1.jpg')
 		});
@@ -355,7 +340,7 @@ function tree(){
 window.onload = main();
 
 function main(){
-	
+	console.log(audio)
 	camera.position.set(0, 0.2, 1.2)
 	
 	
@@ -379,6 +364,24 @@ function main(){
 	const ambientLight = new THREE.AmbientLight(color,ambientIntensity);
 	scene.add(ambientLight);
 
+	
+	//Background music theme 
+	camera.add(listener);
+	audioLoader.load('sounds/main_theme.mp3', function (buffer) {
+		soundMainTheme.setBuffer(buffer);
+		soundMainTheme.setLoop(true);
+		soundMainTheme.setVolume(0.5);
+	});
+
+	//Pickup pokeball sound
+	audioLoader.load('sounds/poke.mp3', function (buffer) {
+		soundPokeball.setBuffer(buffer);
+		soundPokeball.setLoop(false);
+		soundPokeball.setVolume(1.5);
+	});
+	
+	
+
 	//Ground1
 	ground1 = new Ground();
 	ground1.position.y = 0;
@@ -394,12 +397,6 @@ function main(){
 	ground2.rotation.x = -Math.PI * 0.5;
 	scene.add(ground2);
 
-	//GroundGrass
-	/*groundGrass = new GroundGrass();
-	groundGrass.position.y = -0.001;
-	groundGrass.position.z = 0;
-	groundGrass.rotation.x = -Math.PI * 0.5;
-	scene.add(groundGrass);*/
 
 	//Clouds
 	/*cloud1 = new Cloud();
@@ -453,8 +450,8 @@ function main(){
 
 	
 	blaziken();
-	//blastoise();
-	//articuno();
+	blastoise();
+	articuno();
 	
 	//user movement
 	document.addEventListener("keydown", onKeyDown, false);
@@ -511,7 +508,7 @@ function render() {
 function movementPokeball(time) {
 	for (let i = 0; i < numPokeball; i++) {
 		pokeballs[i].rotation.y = (time * 6)
-		pokeballs[i].position.z += 0.01;
+		pokeballs[i].position.z += SPEED_DIFFICULTY;
 		
 		if (pokeballs[i].position.z > 1.2) {
 			//pokeballs[i].position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
@@ -529,22 +526,22 @@ function movementGround(time){
 
 function movementTree(){
 	for(let i=0; i<numTree; i++){
-		treesL1[i].position.z += 0.01;
+		treesL1[i].position.z += SPEED_DIFFICULTY;
 		if(treesL1[i].position.z > 1){
 			treesL1[i].position.z = -1.3;
 		}
 	
-		treesL3[i].position.z += 0.01;
+		treesL3[i].position.z += SPEED_DIFFICULTY;
 		if(treesL3[i].position.z > 1){
 			treesL3[i].position.z = -1.3;
 		}
 		
-		treesR1[i].position.z += 0.01;
+		treesR1[i].position.z += SPEED_DIFFICULTY;
 		if(treesR1[i].position.z > 1){
 			treesR1[i].position.z = -1.3;
 		}
 		
-		treesR3[i].position.z += 0.01;
+		treesR3[i].position.z += SPEED_DIFFICULTY;
 		if(treesR3[i].position.z > 1){
 			treesR3[i].position.z = -1.3;
 		}
@@ -555,7 +552,7 @@ function movementTree(){
 function movementBlastoise(){
 	for (let i = 0; i < 2; i++) {
 		if (models2[i]) {
-			models2[i].position.z += 0.01;
+			models2[i].position.z += SPEED_DIFFICULTY;
 			if (models2[i].position.z > 1.5) {
 				models2[i].position.z = -1.3;
 				models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
@@ -567,7 +564,7 @@ function movementBlastoise(){
 function movementArticuno(){
 	for (let i = 0; i < 2; i++) {
 		if (models3[i]) {
-			models3[i].position.z += 0.01;
+			models3[i].position.z += SPEED_DIFFICULTY;
 			if (models3[i].position.z > 1.5) {
 				models3[i].position.z = -1.3;
 				models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
@@ -920,16 +917,24 @@ function collisionSystem(){
 			if(diffPos.length() < 0.1){
 				pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 				pokeballs[i].position.z = -1.3;
+				if(audio){
+					soundPokeball.play();
+				}
 				score++;
 			}	
 		}
 		if(score > 2){
 			GAME_RUNNING = false;
-			setTimeout(() => {
+			gameOverScore.innerText = "Score: " + score;
+			/*setTimeout(() => {
 				gameOverMenu.style.display = 'grid'
-			}, 1000)
-			gameOverScore.innerText = "Score: " + score
-			score = 0;
+				
+			}, 1000)*/
+			gameOverMenu.style.display = 'grid';
+			if(audio){
+				soundMainTheme.stop();
+			}
+			
 		}
 		/*for(let i=0; i<modelsBlastoise.length; i++){
 			let blastoise = modelsBlastoise[i];
@@ -943,6 +948,25 @@ function collisionSystem(){
 			}
 
 		}*/
+	}
+}
+
+function restartGame(){
+	model1.position.x = 0
+	score = 0;
+
+	for(let i=0; i<numPokeball; i++){
+		pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)]
+		pokeballs[i].position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
+	}
+
+	for(let i=0; i<2; i++){
+		if(models2[i] && models3[i]){
+		models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
+		models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPathZ.length)];
+		models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
+		models3[i].position.z = groundPathZArticuno[Math.floor(Math.random() * groundPathZ.length)];
+		}
 	}
 }
 
@@ -995,14 +1019,40 @@ function userInterface(){
 	document.getElementById("start-button").onclick = () =>{
 		GAME_RUNNING = true;
 		
-		startMenu.style.display = 'none';
+		//Set audio from options
+		audio = document.getElementById("sounds").checked;
+		
+		//Set difficulty from options
+		let difficulties= document.getElementsByName('difficulty');
+		for(let i=0; i<difficulties.length; i++){
+			if(difficulties[i].checked){
+				SPEED_DIFFICULTY = Number(difficulties[i].value);
+			}
+		}
+		
+
+		if(audio){
+			soundMainTheme.play();
+		}
+		
+		mainMenu.style.display = 'none';
 	};
 	
 	document.getElementById("try-again-button").onclick = () =>{
+		restartGame();
 		GAME_RUNNING = true;
+		if(audio){
+			soundMainTheme.play();
+		}
 		
 		gameOverMenu.style.display = 'none';
 	};
+	
+	/*document.getElementById("main-menu-button").onclick = () =>{
+		gameOverMenu.style.display = 'none';
+		mainMenu.style.display = 'block'
+	};*/
+
 }
 
 function resizeRendererToDisplaySize(renderer) {
