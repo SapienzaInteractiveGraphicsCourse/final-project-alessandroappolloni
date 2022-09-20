@@ -190,7 +190,7 @@ class Tree{
 }
 
 function blaziken(){
-	modelLoader.load( '/models/blaziken/scene.gltf', function ( gltf ) {
+	modelLoader.load( 'models/blaziken/scene.gltf', function ( gltf ) {
 		model1 = gltf.scene
 		model1.scale.set(0.03,0.03,0.03);
 		model1.position.x = 0;
@@ -230,7 +230,7 @@ function blaziken(){
 
 function blastoise(){
 	for(let i=0; i<NUM_BLASTOISE; i++){
-		modelLoader.load( '/models/blastoise/scene.gltf', function ( gltf ) {
+		modelLoader.load( 'models/blastoise/scene.gltf', function ( gltf ) {
 			models2[i] = gltf.scene
 			models2[i].scale.set(0.04,0.04,0.04);
 			models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
@@ -247,7 +247,7 @@ function blastoise(){
 
 function articuno(){
 	for(let i=0; i<NUM_ARTICUNO; i++){
-		modelLoader.load( '/models/articuno/scene.gltf', function ( gltf ) {
+		modelLoader.load( 'models/articuno/scene.gltf', function ( gltf ) {
 			models3[i] = gltf.scene
 			models3[i].scale.set(0.02,0.02,0.02);
 			models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
