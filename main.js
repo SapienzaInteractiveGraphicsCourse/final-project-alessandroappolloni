@@ -26,6 +26,8 @@ const gameOverScore = document.getElementById("game-over-score");
 const numPokeball = 4;
 const numTree = 4;
 let SPEED_DIFFICULTY;
+let NUM_ARTICUNO = 1;
+let NUM_BLASTOISE = 2;
 
 let ground1;
 let ground2;
@@ -33,12 +35,10 @@ let cloud1;
 let cloud2;
 let cloud3;
 let cloud4;
-let cloud5;
-let cloud6;
 
 let groundPath = [-0.2, 0, 0.2];
 let groundPathZ = [-1.3, -1.9, -2.6]
-let groundPathZArticuno = [-1.7, -2.3];
+let groundPathZArticuno = [-1.7, -2.2];
 let groundPathZBlastoise = [-1.5, -2.4];
 
 let pokeballs = [];
@@ -194,7 +194,7 @@ function blaziken(){
 		model1 = gltf.scene
 		model1.scale.set(0.03,0.03,0.03);
 		model1.position.x = 0;
-		model1.position.y = -0.005;
+		model1.position.y = -0.01;
 		model1.position.z = 0.90;
 		model1.rotation.x = -0.3;
 		model1.rotation.y = 3.1;
@@ -229,13 +229,13 @@ function blaziken(){
 }
 
 function blastoise(){
-	for(let i=0; i<2; i++){
+	for(let i=0; i<NUM_BLASTOISE; i++){
 		modelLoader.load( '/models/blastoise/scene.gltf', function ( gltf ) {
 			models2[i] = gltf.scene
 			models2[i].scale.set(0.04,0.04,0.04);
 			models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			models2[i].position.y = 0.0;
-			models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPathZ.length)];
+			models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPathZBlastoise.length)];
 			scene.add(models2[i]);
 			animationBlastoise(models2[i]);
 	
@@ -246,13 +246,13 @@ function blastoise(){
 }
 
 function articuno(){
-	for(let i=0; i<2; i++){
+	for(let i=0; i<NUM_ARTICUNO; i++){
 		modelLoader.load( '/models/articuno/scene.gltf', function ( gltf ) {
 			models3[i] = gltf.scene
 			models3[i].scale.set(0.02,0.02,0.02);
 			models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			models3[i].position.y = 0.03;
-			models3[i].position.z = groundPathZArticuno[Math.floor(Math.random() * groundPathZ.length)];
+			models3[i].position.z = groundPathZArticuno[Math.floor(Math.random() * groundPathZArticuno.length)];
 			models3[i].rotation.x = 1.0;
 			
 			let tail1 = models3[i].getObjectByName("Tail1_044");
@@ -342,7 +342,6 @@ function main(){
 	
 	camera.position.set(0, 0.2, 1.2)
 	
-	
 	scene.background = new THREE.Color('skyblue');
 	scene.fog = new THREE.Fog('skyblue', 1, 2.5);
 	
@@ -398,41 +397,29 @@ function main(){
 
 
 	//Clouds
-	/*cloud1 = new Cloud();
-	cloud1.position.x = -1.4
-	cloud1.position.y = 0.6;
+	cloud1 = new Cloud();
+	cloud1.position.x = -0.9;
+	cloud1.position.y = 0.7;
 	cloud1.position.z = -0.6;
 	scene.add(cloud1);
 
 	cloud2 = new Cloud();
-	cloud2.position.x = -0.9;
-	cloud2.position.y = 0.4;
-	cloud2.position.z = -0.6;
-	scene.add(cloud2);*/
+	cloud2.position.x = -0.3;
+	cloud2.position.y = 0.6;
+	cloud2.position.z = -0.8;
+	scene.add(cloud2);
 
 	cloud3 = new Cloud();
-	cloud3.position.x = -0.3;
-	cloud3.position.y = 0.5;
-	cloud3.position.z = -0.8;
+	cloud3.position.x = 0.3;
+	cloud3.position.y = 0.7;
+	cloud3.position.z = -0.6;
 	scene.add(cloud3);
 
 	cloud4 = new Cloud();
-	cloud4.position.x = 0.3;
+	cloud4.position.x = 1.4;
 	cloud4.position.y = 0.7;
 	cloud4.position.z = -0.6;
 	scene.add(cloud4);
-
-	/*cloud5 = new Cloud();
-	cloud5.position.x = 0.7;
-	cloud5.position.y = 0.5;
-	cloud5.position.z = -0.6;
-	scene.add(cloud5);*/
-
-	cloud6 = new Cloud();
-	cloud6.position.x = 1.4;
-	cloud6.position.y = 0.7;
-	cloud6.position.z = -0.6;
-	scene.add(cloud6);
 
 	tree();
 
@@ -505,7 +492,7 @@ function render() {
  */
 
 function movementPokeball(time) {
-	for (let i = 0; i < numPokeball; i++) {
+	for (let i = 0; i < pokeballs.length; i++) {
 		pokeballs[i].rotation.y = (time * 6)
 		pokeballs[i].position.z += SPEED_DIFFICULTY;
 		
@@ -549,11 +536,11 @@ function movementTree(){
 }
 
 function movementBlastoise(){
-	for (let i = 0; i < 2; i++) {
+	for (let i = 0; i < models2.length; i++) {
 		if (models2[i]) {
 			models2[i].position.z += SPEED_DIFFICULTY;
-			if (models2[i].position.z > 1.5) {
-				models2[i].position.z = -1.3;
+			if (models2[i].position.z > 1.3) {
+				models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPathZBlastoise.length)];  //-1.3;
 				models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			}
 		}
@@ -561,11 +548,11 @@ function movementBlastoise(){
 }
 
 function movementArticuno(){
-	for (let i = 0; i < 2; i++) {
+	for (let i = 0; i < models3.length; i++) {
 		if (models3[i]) {
 			models3[i].position.z += SPEED_DIFFICULTY;
-			if (models3[i].position.z > 1.5) {
-				models3[i].position.z = -1.3;
+			if (models3[i].position.z > 1.3) {
+				models3[i].position.z = groundPathZArticuno[Math.floor(Math.random() * groundPathZArticuno.length)];  //-1.3;
 				models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			}
 		}
@@ -928,46 +915,72 @@ function collisionSystem(){
 				score++;
 			}	
 		}
-		if(score > 20){
-			GAME_RUNNING = false;
-			gameOverScore.innerText = "Score: " + score;
-			
-			gameOverMenu.style.display = 'grid';
-			if(audio){
-				soundMainTheme.stop();
-			}
-			
-		}
-		/*for(let i=0; i<modelsBlastoise.length; i++){
-			let blastoise = modelsBlastoise[i];
-			
-			let blastoisePos = blastoise.position.clone();
-			let modelPos1 = model1.position.clone();
-			let diffPos1 = modelPos1.sub(blastoisePos);
-			
-			if(diffPos1.length() < 0.1){
-				health--;
-			}
+		
+		for (let i = 0; i < models2.length; i++) {
+			if (models2[i]) {
 
-		}*/
+
+				let blastoise = models2[i];
+				let blastoisePos = blastoise.position.clone();
+				let model1Pos = model1.position.clone();
+				let diffPos1 = model1Pos.sub(blastoisePos);
+
+				if (diffPos1.length() < 0.1) {
+					gameOver();
+				}
+			}
+		}
+
+		for (let i = 0; i < models3.length; i++) {
+			if (models3[i]) {
+
+				let articuno = models3[i];
+				let articunoPos = articuno.position.clone();
+				let modelPos_ = model1.position.clone();
+				let diffPos_ = modelPos_.sub(articunoPos);
+				console.log(diffPos_.length());
+
+				if (diffPos_.length() < 0.05) {
+					gameOver();
+				}
+			}
+		}
+	}
+}
+
+function gameOver(){
+	GAME_RUNNING = false;
+	gameOverScore.innerText = "Score: " + score;
+			
+	gameOverMenu.style.display = 'grid';
+	if(audio){
+		soundMainTheme.stop();
 	}
 }
 
 function restartGame(){
-	model1.position.x = 0
+	if(model1){
+		model1.position.x = 0
+	}
+	
 	score = 0;
 
-	for(let i=0; i<numPokeball; i++){
+	for(let i=0; i<pokeballs.length; i++){
 		pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)]
 		pokeballs[i].position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
 	}
 
-	for(let i=0; i<2; i++){
-		if(models2[i] && models3[i]){
+	for(let i=0; i<models2.length; i++){
+		if(models2[i]){
 		models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
-		models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPathZ.length)];
-		models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
-		models3[i].position.z = groundPathZArticuno[Math.floor(Math.random() * groundPathZ.length)];
+		models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPathZBlastoise.length)];
+		}
+	}
+
+	for(let i=0; i<models3.length; i++){
+		if(models3[i]){
+			models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
+			models3[i].position.z = groundPathZArticuno[Math.floor(Math.random() * groundPathZArticuno.length)];
 		}
 	}
 }
@@ -978,11 +991,11 @@ function onKeyDown(e){
 	switch(e.keyCode){
 		//Left
 		case 37:
-			if(model1 && (model1.position.x == 0.2 || model1.position.x == 0)){
+			if(model1 && model1.position.y == -0.01 && (model1.position.x == 0.2 || model1.position.x == 0) ){
 				
 				const coords = model1.position
 				const tween = new TWEEN.Tween(coords) 
-					.to({ x: '-0.2', y: 0, z: 0.9 }, 500) 
+					.to({ x: '-0.2', y: '+0', z: '+0' }, 300) 
 					.easing(TWEEN.Easing.Quadratic.Out) 
 					.start()
 					
@@ -990,11 +1003,11 @@ function onKeyDown(e){
 		break;
 		//Up
 		case 38:
-			if(model1 && model1.position.y == 0 && (model1.position.x == -0.2 || model1.position.x == 0.0 || model1.position.x == 0.2)){
-				//model1.position.y = 0.1;
+			if(model1 && model1.position.y == -0.01 && (model1.position.x == -0.2 || model1.position.x == 0.0 || model1.position.x == 0.2)){
+				
 				const coords = model1.position
 				const tween = new TWEEN.Tween(coords) 
-					.to({ x: '+0', y: [0.15, 0], z: '+0' }, 2000) 
+					.to({ x: '+0', y: [0.1, -0.01], z: '+0' }, 1500) 
 					.easing(TWEEN.Easing.Quadratic.Out) 
 					.start()
 
@@ -1002,10 +1015,11 @@ function onKeyDown(e){
 		break;
 		//Right
 		case 39:
-			if(model1 && (model1.position.x==-0.2 || model1.position.x == 0)){
+			if(model1 && model1.position.y == -0.01 && (model1.position.x==-0.2 || model1.position.x == 0)){
+				
 				const coords = model1.position
 				const tween = new TWEEN.Tween(coords) 
-					.to({ x: '+0.2', y: 0, z: 0.9 }, 500)  
+					.to({ x: '+0.2', y: '+0', z: '+0' }, 300)  
 					.easing(TWEEN.Easing.Quadratic.Out) 
 					.start()
 			}
