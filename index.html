@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<title>Main Project</title>
 		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 		<script type="module" src="main.js"></script>
 	</head>
 	<body>
@@ -29,35 +30,77 @@
 					<img id="run-logo" src="images/run_logo.png" height="auto" width="auto"> 
 				</div>
 				<div class="row">
-					<button id="start-button">Start</button>
+					<div class="btn-group"><button id="start-button" class="button">Start</button></div>
 				</div>
 				
-				<div class="row">
+				<div class="row" id="options-sound">
 					<input type="checkbox" id="sounds" name="sounds" checked>
       				<label for="sounds">Sounds</label>
 				</div>
-				<div class="row">
+				<div class="row" id="options-difficulty">
 					Difficulty:
 					<form>
 						<input type="radio" id="easy" name="difficulty" value="0.01" >
-						<label for="easy">Easy</label><br>
+						<label for="easy">Easy</label>
 						<input type="radio" id="normal" name="difficulty" value="0.015" checked>
-						<label for="normal">Normal</label><br>
+						<label for="normal">Normal</label>
 						<input type="radio" id="hard" name="difficulty" value="0.025">
 						<label for="hard">Hard</label>
 					  </form>
 				</div>
 			</div>
-			<div class="column"><p></p></div>
+			<div class="column">
+				<p></p>
+				<div id="rules-menu" >
+					
+					<div style="font-size:25px" class="row">Rules:</div>
+					<div class="row">
+						Use 
+						<span class="material-symbols-outlined">
+						arrow_back
+						</span> 
+						to move left</div>
+					<div class="row">
+						Use 
+						<span class="material-symbols-outlined">
+						arrow_forward
+						</span> 
+						to move right
+					</div>
+					<div class="row">Use 
+						<span class="material-symbols-outlined">
+						arrow_upward
+						</span> to jump
+					</div>
+					<div class="row"> Collect the pokeballs 
+						<img src="images/icons8-pokeball-48.png">
+					</div>
+					<div class="row">Avoid Blastoise
+						<img src="images/blastoise.png" height="96" width="96"> 
+						and Articuno
+						<img src="images/articuno.png" height="96" width="96"> 
+					</div>
+				
+				</div>
+			</div>
 		</div>
 
 		<div id="game-over-menu">
 			
 			<div id="column">
-				<div id="game-over-title">Game Over!</div>
-				<div id="game-over-score">Score: </div>
-				<div id="game-over-button"><button id="try-again-button">Try Again</button></div>
-				<div id="game-over-button2"><button id="main-menu-button">Main Menu</button></div>
+				<div id="game-over-title" class="row">Game Over!</div>
+				<div id="game-over-score" class="row">Score: </div>
+				<div id="game-over-button" class="row">
+					<div class="btn-group">
+						<button id="try-again-button" class="button">Try Again</button>
+					</div>
+				</div>
+				
+				<div id="game-over-button2" class="row">
+					<div class="btn-group">
+						<button id="main-menu-button" class="button">Main Menu</button>
+					</div>
+				</div>
 			</div>
 		</div>
 

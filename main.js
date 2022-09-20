@@ -29,7 +29,6 @@ let SPEED_DIFFICULTY;
 
 let ground1;
 let ground2;
-let groundGrass;
 let cloud1;
 let cloud2;
 let cloud3;
@@ -340,7 +339,7 @@ function tree(){
 window.onload = main();
 
 function main(){
-	console.log(audio)
+	
 	camera.position.set(0, 0.2, 1.2)
 	
 	
@@ -918,18 +917,21 @@ function collisionSystem(){
 				pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 				pokeballs[i].position.z = -1.3;
 				if(audio){
-					soundPokeball.play();
+					if(soundPokeball.isPlaying == false){
+						soundPokeball.play();
+					}
+					else{
+						soundPokeball.stop();
+						soundPokeball.play();
+					}
 				}
 				score++;
 			}	
 		}
-		if(score > 2){
+		if(score > 20){
 			GAME_RUNNING = false;
 			gameOverScore.innerText = "Score: " + score;
-			/*setTimeout(() => {
-				gameOverMenu.style.display = 'grid'
-				
-			}, 1000)*/
+			
 			gameOverMenu.style.display = 'grid';
 			if(audio){
 				soundMainTheme.stop();
@@ -982,7 +984,6 @@ function onKeyDown(e){
 				const tween = new TWEEN.Tween(coords) 
 					.to({ x: '-0.2', y: 0, z: 0.9 }, 500) 
 					.easing(TWEEN.Easing.Quadratic.Out) 
-					//.onUpdate(() => {console.log(model1.position)})
 					.start()
 					
 			}
@@ -1048,10 +1049,9 @@ function userInterface(){
 		gameOverMenu.style.display = 'none';
 	};
 	
-	/*document.getElementById("main-menu-button").onclick = () =>{
-		gameOverMenu.style.display = 'none';
-		mainMenu.style.display = 'block'
-	};*/
+	document.getElementById("main-menu-button").onclick = () =>{
+		window.location.reload();
+	};
 
 }
 
@@ -1080,14 +1080,3 @@ window.onerror = (message, source, lineno, colno, error) => {
 	console.log(error.toString());
 };
 
-function dumpObject(obj, lines = [], isLast = true, prefix = '') {
-	const localPrefix = isLast ? '└─' : '├─';
-	lines.push(`${prefix}${prefix ? localPrefix : ''}${obj.name || '*no-name*'} [${obj.type}]`);
-	const newPrefix = prefix + (isLast ? '  ' : '│ ');
-	const lastNdx = obj.children.length - 1;
-	obj.children.forEach((child, ndx) => {
-	  const isLast = ndx === lastNdx;
-	  dumpObject(child, lines, isLast, newPrefix);
-	});
-	return lines;
-  }
