@@ -62,6 +62,8 @@ let model1;
 let spine;
 let hip;
 let tail;
+let leftHair;
+let rightHair;
 let leftUpperArm;
 let rightUpperArm;
 let leftLowerArm;
@@ -223,7 +225,9 @@ function blaziken(){
 		
 		spine = model1.getObjectByName("Spine1_015");
 		hip = model1.getObjectByName("Hips_04");
-		tail = model1.getObjectByName("Tail_030"); 
+		tail = model1.getObjectByName("Tail_030");
+		leftHair = model1.getObjectByName("LHair1_058");
+		rightHair = model1.getObjectByName("RHair1_062"); 
 		
 		animationBlaziken();
 
@@ -484,6 +488,7 @@ function render() {
 		TWEEN.update()
 	}
 
+	
 	
 
 
@@ -930,7 +935,7 @@ function collisionSystem(){
 				let blastoisePos = blastoise.position.clone();
 				let model1Pos = model1.position.clone();
 				let diffPos1 = model1Pos.sub(blastoisePos);
-				if (diffPos1.length() < 0.13) {
+				if (diffPos1.length() < 0.2) {
 					gameOver();
 				}
 			}
@@ -1024,6 +1029,31 @@ function onKeyDown(e){
 					})
 					
 				tweenUP.start();
+
+				//Hair up-down
+				const tweenLH1 = new TWEEN.Tween(leftHair.rotation) 
+					.to({ x: '+0', y: '+0', z: '+0.7' }, 300) 
+					.easing(TWEEN.Easing.Quadratic.Out) 
+				
+				const tweenLH2 = new TWEEN.Tween(leftHair.rotation) 
+				.to({ x: '+0', y: '+0', z: '-0.7' }, 300) 
+				.easing(TWEEN.Easing.Quadratic.Out)
+				
+				tweenLH1.chain(tweenLH2);
+				tweenLH1.start();
+
+				const tweenRH1 = new TWEEN.Tween(rightHair.rotation) 
+					.to({ x: '+0', y: '+0', z: '+0.7' }, 300) 
+					.easing(TWEEN.Easing.Quadratic.Out) 
+				
+				const tweenRH2 = new TWEEN.Tween(rightHair.rotation) 
+				.to({ x: '+0', y: '+0', z: '-0.7' }, 300) 
+				.easing(TWEEN.Easing.Quadratic.Out)
+				
+				tweenRH1.chain(tweenRH2);
+				tweenRH1.start();
+
+
 				
 
 			}
