@@ -26,7 +26,7 @@ const gameOverScore = document.getElementById("game-over-score");
 
 setTimeout(() => {
 	document.getElementById("start-button").style.display = 'block';
-}, 100)
+}, 200)
 
 const NUM_POKEBALL = 6;
 const NUM_TREE = 4;
