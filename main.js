@@ -1047,7 +1047,7 @@ function userInterface(){
 	document.getElementById("score").innerText = 'Score: ' + score;
 	
 	document.getElementById("start-button").onclick = () =>{
-		//setTimeout(() => {
+		setTimeout(() => {
 		
 		//Set audio from options
 		audio = document.getElementById("sounds").checked;
@@ -1067,7 +1067,7 @@ function userInterface(){
 		GAME_FLAG = true;
 		mainMenu.style.display = 'none';
 		
-		//}, 100)
+		}, 100)
 	};
 	
 	/*document.getElementById("try-again-button").onclick = () =>{
