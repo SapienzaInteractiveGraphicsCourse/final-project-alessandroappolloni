@@ -26,12 +26,15 @@ const gameOverScore = document.getElementById("game-over-score");
 
 setTimeout(() => {
 	document.getElementById("start-button").style.display = 'block';
-}, 200)
+}, 1600)
 
 const NUM_POKEBALL = 6;
 const NUM_TREE = 4;
 const NUM_ARTICUNO = 2;
 const NUM_BLASTOISE = 2;
+const RANDOMNESS_ARTICUINO = 4;
+const RANDOMNESS_BLASTOISE = 4;
+const RANDOMNDESS_POKEBALL = 9;
 
 let SPEED_DIFFICULTY;
 let GAME_FLAG = false;
@@ -243,7 +246,7 @@ function blastoise(){
 			models2[i].scale.set(0.065,0.065,0.065);
 			models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			models2[i].position.y = 0.0;
-			models2[i].position.z = -1.3 - (Math.random() * 2); 
+			models2[i].position.z = -1.3 - (Math.random() * RANDOMNESS_BLASTOISE); 
 			scene.add(models2[i]);
 			animationBlastoise(models2[i]);
 	
@@ -260,7 +263,7 @@ function articuno(){
 			models3[i].scale.set(0.02,0.02,0.02);
 			models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			models3[i].position.y = 0.03;
-			models3[i].position.z = -1.3 - (Math.random() * 2); 
+			models3[i].position.z = -1.3 - (Math.random() * RANDOMNESS_ARTICUINO); 
 			models3[i].rotation.x = 1.0;
 			
 			let tail1 = models3[i].getObjectByName("Tail1_044");
@@ -438,7 +441,7 @@ function main(){
 		let pokeball = new Pokeball();
 		pokeball.position.y = 0.05;
 		pokeball.position.x = groundPath[Math.floor(Math.random() * groundPath.length)]
-		pokeball.position.z = -1.3 - (Math.random() * 9); 
+		pokeball.position.z = -1.3 - (Math.random() * RANDOMNDESS_POKEBALL); 
 		pokeballs.push(pokeball);
 		scene.add(pokeball);
 	}
@@ -510,15 +513,15 @@ function movementPokeball(time) {
 		pokeballs[i].position.z += SPEED_DIFFICULTY;
 		
 		if (pokeballs[i].position.z > 1.2) {
-			pokeballs[i].position.z = -1.3 - (Math.random() * 9); 
+			pokeballs[i].position.z = -1.3 - (Math.random() * RANDOMNDESS_POKEBALL); 
 			pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 		}
 	}
 }
 
 function movementGround(time){
-	ground1.position.z = (time * 0.5) % 2;
-	ground2.position.z = ((time * 0.5) % 2) - 2;
+	ground1.position.z = (time * 50 * SPEED_DIFFICULTY) % 2;
+	ground2.position.z = ((time * 50 * SPEED_DIFFICULTY ) % 2) - 2;
 
 }
 
@@ -552,7 +555,7 @@ function movementBlastoise(){
 		if (models2[i]) {
 			models2[i].position.z += SPEED_DIFFICULTY;
 			if (models2[i].position.z > 1.3) {
-				models2[i].position.z = -1.3 - (Math.random() * 2);   
+				models2[i].position.z = -1.3 - (Math.random() * RANDOMNESS_BLASTOISE);   
 				models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			}
 		}
@@ -564,7 +567,7 @@ function movementArticuno(){
 		if (models3[i]) {
 			models3[i].position.z += SPEED_DIFFICULTY;
 			if (models3[i].position.z > 1.3) {
-				models3[i].position.z = -1.3 - (Math.random() * 2);   
+				models3[i].position.z = -1.3 - (Math.random() * RANDOMNESS_ARTICUINO);   
 				models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
 			}
 		}
@@ -914,7 +917,7 @@ function collisionSystem(){
 
 			if(diffPos.length() < 0.1){
 				pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
-				pokeballs[i].position.z = -1.3 - (Math.random() * 9);
+				pokeballs[i].position.z = -1.3 - (Math.random() * RANDOMNDESS_POKEBALL);
 				if(audio){
 					if(soundPokeball.isPlaying == false){
 						soundPokeball.play();
@@ -1017,14 +1020,14 @@ function onKeyDown(e){
 				
 				const coords = model1.position
 				const tweenUP = new TWEEN.Tween(coords)
-				.to({ x: '+0', y: 0.17, z: '+0' }, 200) 
+				.to({ x: '+0', y: 0.17, z: '+0' }, 13334*SPEED_DIFFICULTY) //200
 					.easing(TWEEN.Easing.Quadratic.Out) 
 					.onComplete(() => {
 						const coords1 = model1.position
 						const tweenDWN = new TWEEN.Tween(coords1)
-							.to({ x: '+0', y: 0, z: '+0' }, 1000) 
+							.to({ x: '+0', y: 0, z: '+0' }, 30000*SPEED_DIFFICULTY) //1000
 							.easing(TWEEN.Easing.Quadratic.Out)
-							//.delay(100) 
+							.delay(100) 
 							.start()
 					})
 					
