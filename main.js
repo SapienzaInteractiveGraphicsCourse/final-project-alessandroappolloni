@@ -48,9 +48,6 @@ let cloud3;
 let cloud4;
 
 let groundPath = [-0.2, 0, 0.2];
-let groundPathZ = [-1.3, -1.9, -2.6]
-let groundPathZArticuno = [-1.7, -2.2];
-let groundPathZBlastoise = [-1.5, -2.4];
 
 let pokeballs = [];
 let treesL1 = [];
@@ -122,7 +119,6 @@ class Cloud {
 		const detail = 2;  // ui: detail
 		const geometry = new THREE.OctahedronGeometry(radius, detail);
 		const material = new THREE.MeshPhongMaterial({
-			//color: 'lightgrey',
 			map: textureLoader.load('textures/white2.webp')
 		});
 		material.flatShading = true;
@@ -456,15 +452,10 @@ function main(){
 	articuno();
 	
 	
-	//user movement
+	//user inputs
 	document.addEventListener("keydown", onKeyDown, false);
 	
-
-	
 	render()
-	
-	
-	
 }
 
 
@@ -479,7 +470,6 @@ function render() {
 	const elapsedTime = clock.getElapsedTime();
 	
 	userInterface();
-	collisionSystem();
 	
 	renderer.render(scene, camera);
 	requestAnimationFrame(render);
@@ -491,12 +481,10 @@ function render() {
 		movementTree()
 		movementBlastoise();
 		movementArticuno();
+		collisionSystem();
 		TWEEN.update()
 	}
 }
-
-
-
 
 
 /**
@@ -966,34 +954,6 @@ function gameOver(){
 	}
 }
 
-function restartGame(){
-	if(model1){
-		model1.position.x = 0
-	}
-	
-	score = 0;
-
-	for(let i=0; i<pokeballs.length; i++){
-		pokeballs[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)]
-		pokeballs[i].position.z = groundPathZ[Math.floor(Math.random() * groundPathZ.length)];
-	}
-
-	for(let i=0; i<models2.length; i++){
-		if(models2[i]){
-		models2[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
-		models2[i].position.z = groundPathZBlastoise[Math.floor(Math.random() * groundPathZBlastoise.length)];
-		}
-	}
-
-	for(let i=0; i<models3.length; i++){
-		if(models3[i]){
-			models3[i].position.x = groundPath[Math.floor(Math.random() * groundPath.length)];
-			models3[i].position.z = groundPathZArticuno[Math.floor(Math.random() * groundPathZArticuno.length)];
-		}
-	}
-}
-
-
 
 function onKeyDown(e){
 	switch(e.keyCode){
@@ -1098,17 +1058,6 @@ function userInterface(){
 		}, 100)
 	};
 	
-	/*document.getElementById("try-again-button").onclick = () =>{
-		restartGame();
-		GAME_RUNNING = true;
-		
-		
-		if(audio){
-			soundMainTheme.play();
-		}
-		
-		gameOverMenu.style.display = 'none';
-	};*/
 	
 	document.getElementById("main-menu-button").onclick = () =>{
 		window.location.reload();
