@@ -1,5 +1,6 @@
 # Interactive Graphics - Final Project
-Alessandro Appolloni - 1757950
+
+# Alessandro Appolloni - 1757950
 
 ![title](images/logo1.PNG)
 
