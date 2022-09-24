@@ -171,8 +171,10 @@ class Tree{
 		const geometryCone = new THREE.ConeGeometry(radius1, height1, radialSegments1);
 		const materialCone = new THREE.MeshPhongMaterial({
 			flatShading: true,
-			map: textureLoader.load('textures/green1.jpg')
+			map: textureLoader.load('textures/green1.jpg'),
+			normalMap: textureLoader.load('textures/NormalMap_green.png')
 		});
+		material.normalScale.set(1, 1)
 		const meshBottomCone = new THREE.Mesh(geometryCone, materialCone);
 		group.add(meshBottomCone);
 		meshBottomCone.scale.set(0.1,0.1,0.1);
@@ -341,7 +343,60 @@ function tree(){
 	
 }
 
+function clouds(){
+	cloud1 = new Cloud();
+	cloud1.position.x = -0.9;
+	cloud1.position.y = 0.7;
+	cloud1.position.z = -0.6;
+	scene.add(cloud1);
 
+	cloud2 = new Cloud();
+	cloud2.position.x = -0.3;
+	cloud2.position.y = 0.6;
+	cloud2.position.z = -0.8;
+	scene.add(cloud2);
+
+	cloud3 = new Cloud();
+	cloud3.position.x = 0.3;
+	cloud3.position.y = 0.7;
+	cloud3.position.z = -0.6;
+	scene.add(cloud3);
+
+	cloud4 = new Cloud();
+	cloud4.position.x = 1.4;
+	cloud4.position.y = 0.7;
+	cloud4.position.z = -0.6;
+	scene.add(cloud4);
+}
+
+function grounds(){
+	//Ground1
+	ground1 = new Ground();
+	ground1.position.y = 0;
+	ground1.position.z = 0;
+	ground1.rotation.x = -Math.PI * 0.5;
+	scene.add(ground1);
+
+
+	//Ground2
+	ground2 = new Ground();
+	ground2.position.y = 0;
+	ground2.position.z = -2;
+	ground2.rotation.x = -Math.PI * 0.5;
+	scene.add(ground2);
+
+}
+
+function createPokeballs(){
+	for(let i=0; i<NUM_POKEBALL; i++){
+		let pokeball = new Pokeball();
+		pokeball.position.y = 0.05;
+		pokeball.position.x = groundPath[Math.floor(Math.random() * groundPath.length)]
+		pokeball.position.z = -1.3 - (Math.random() * RANDOMNDESS_POKEBALL); 
+		pokeballs.push(pokeball);
+		scene.add(pokeball);
+	}
+}
 
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
@@ -353,14 +408,15 @@ window.onload = main();
 function main(){
 	
 	camera.position.set(0, 0.3, 1.25)
+	camera.lookAt(0,0,0)
 	
 	scene.background = new THREE.Color('skyblue');
 	scene.fog = new THREE.Fog('skyblue', 1, 2.5);
 	
 	//For moving the camera. For testing
-	const controls = new OrbitControls(camera, canvas);
-    controls.target.set(0, 0, 0);
-    controls.update();
+	//const controls = new OrbitControls(camera, canvas);
+    //controls.target.set(0, 0, 0);
+    //controls.update();
 
 	//Point Light
 	const color = 0xFFFFFF;
@@ -391,62 +447,10 @@ function main(){
 	});
 	
 	
-
-	//Ground1
-	ground1 = new Ground();
-	ground1.position.y = 0;
-	ground1.position.z = 0;
-	ground1.rotation.x = -Math.PI * 0.5;
-	scene.add(ground1);
-
-
-	//Ground2
-	ground2 = new Ground();
-	ground2.position.y = 0;
-	ground2.position.z = -2;
-	ground2.rotation.x = -Math.PI * 0.5;
-	scene.add(ground2);
-
-
-	//Clouds
-	cloud1 = new Cloud();
-	cloud1.position.x = -0.9;
-	cloud1.position.y = 0.7;
-	cloud1.position.z = -0.6;
-	scene.add(cloud1);
-
-	cloud2 = new Cloud();
-	cloud2.position.x = -0.3;
-	cloud2.position.y = 0.6;
-	cloud2.position.z = -0.8;
-	scene.add(cloud2);
-
-	cloud3 = new Cloud();
-	cloud3.position.x = 0.3;
-	cloud3.position.y = 0.7;
-	cloud3.position.z = -0.6;
-	scene.add(cloud3);
-
-	cloud4 = new Cloud();
-	cloud4.position.x = 1.4;
-	cloud4.position.y = 0.7;
-	cloud4.position.z = -0.6;
-	scene.add(cloud4);
-
+	grounds();
+	clouds();
 	tree();
-
-
-	//Pokeballs
-	for(let i=0; i<NUM_POKEBALL; i++){
-		let pokeball = new Pokeball();
-		pokeball.position.y = 0.05;
-		pokeball.position.x = groundPath[Math.floor(Math.random() * groundPath.length)]
-		pokeball.position.z = -1.3 - (Math.random() * RANDOMNDESS_POKEBALL); 
-		pokeballs.push(pokeball);
-		scene.add(pokeball);
-	}
-
-	
+	createPokeballs();
 	blaziken();
 	blastoise();
 	articuno();
@@ -465,7 +469,6 @@ function main(){
 
 
 function render() {
-	
 	
 	if (resizeRendererToDisplaySize(renderer)) {
 	  const canvas = renderer.domElement;
@@ -490,11 +493,6 @@ function render() {
 		movementArticuno();
 		TWEEN.update()
 	}
-
-	
-	
-
-
 }
 
 
@@ -522,7 +520,6 @@ function movementPokeball(time) {
 function movementGround(time){
 	ground1.position.z = (time * 50 * SPEED_DIFFICULTY) % 2;
 	ground2.position.z = ((time * 50 * SPEED_DIFFICULTY ) % 2) - 2;
-
 }
 
 function movementTree(){
@@ -848,7 +845,7 @@ function animationArticuno(model){
 		tweenTL2.chain(tweenTL1);
 		tweenTL1.start();
 		
-		//Leftside
+		//LeftWing
 		let leftUpArm = model.getObjectByName("LArm_066")
 		const tweenLUA1 = new TWEEN.Tween(leftUpArm.rotation) 
 			.to({ x: '+0', y: '+0',  z: -0.5 }, 500)
@@ -874,9 +871,7 @@ function animationArticuno(model){
 		tweenLLA2.chain(tweenLLA1);
 		tweenLLA1.start();
 
-		//--------------------------------------------------
-
-		//RightSide
+		//RightWing
 		let rightUpArm = model.getObjectByName("RArm_082")
 		const tweenRUA1 = new TWEEN.Tween(rightUpArm.rotation) 
 			.to({ x: '+0', y: '+0',  z: 0.5 }, 500)
